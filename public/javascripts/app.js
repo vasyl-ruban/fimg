@@ -1,10 +1,7 @@
 console.log('a');
 
 requirejs.config({
-    baseUrl: '/',
-    paths: {
-       jquery: '/javascripts/jquery'
-    }
+    baseUrl: '/javascripts/'
 });
 
 requirejs(['jquery', 'mediator'],
