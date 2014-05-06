@@ -1,5 +1,5 @@
 define(['jquery', 'mediator'], function($, sandbox) {
-    var $canvas = $('#canvas');
+    var $canvas = $('html');
 
     var File = function() {
         this.sandbox = sandbox;

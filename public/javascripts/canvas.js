@@ -13,19 +13,18 @@ define(['jquery', 'mediator'], function($, sandbox) {
         },
         renderImg: function(e) {
             this.originImg = e.img;
-            this.$canvas.width(this.originImg.width);
-            this.$canvas.height(this.originImg.height);
+            console.log(this.originImg.width, this.originImg.height);
             console.log(this.$canvas.height(), this.$canvas.width());
             this.ctx.drawImage(
                 this.originImg,
-//                0,
-//                0,
-//                this.originImg.width,
-//                this.originImg.height,
                 0,
-                0
-//                this.$canvas.height(),
-//                this.$canvas.width()
+                0,
+                this.originImg.width,
+                this.originImg.height,
+                0,
+                0,
+                this.$canvas.width(),
+                this.$canvas.height()
             );
         }
     };
