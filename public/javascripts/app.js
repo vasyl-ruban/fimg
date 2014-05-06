@@ -1,12 +1,8 @@
-console.log('a');
-
 requirejs.config({
     baseUrl: '/javascripts/'
 });
 
-requirejs(['jquery', 'mediator'],
+requirejs(['jquery', 'mediator', 'dom-controller', 'canvas'],
 function($, sandbox) {
-    console.log(sandbox);
-    console.log('as');
-    console.log($);
+
 });
