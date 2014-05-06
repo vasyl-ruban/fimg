@@ -28,3 +28,11 @@ a {
     width: 600px;
     height: 400px;
 }
+
+.filter-name {
+    padding-bottom: 5px;
+}
+
+.filter {
+    margin-right: 10px;
+}
