@@ -6,7 +6,12 @@ requirejs.config({
     }
 });
 
-requirejs(['jquery', 'mediator', 'dom-controller', 'canvas', 'jqueryUI', 'gaussian-filter'],
+requirejs([
+    'jquery', 'mediator',
+    'dom-controller', 'canvas',
+    'jqueryUI', 'gaussian-filter',
+    'median-filter'
+],
 function($, sandbox) {
 
 });

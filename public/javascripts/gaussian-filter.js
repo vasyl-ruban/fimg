@@ -1,6 +1,5 @@
-define(['jquery', 'mediator', 'base-filter'], function($, sandbox, BaseFilter) {
+define(['jquery', 'base-filter'], function($, BaseFilter) {
     var Gaussian = function() {
-        this.sandbox = sandbox;
         this.filterName = 'gaussian';
         this.filterFullName = 'Gaussian blur';
         this.scaleRange = {
@@ -20,8 +19,7 @@ define(['jquery', 'mediator', 'base-filter'], function($, sandbox, BaseFilter) {
         var value = ui.value
             , currentVal
             , i, j, r, g, b, a;
-        this.fillFilterMatrix(value);
-        this.filterLength = value;
+        this.fillFilterMatrix();
         this.normalizeFilterMatrix();
         console.log(this.filterMatrix);
         for (i=0;i<this.adaptedImg.height;i++) {
@@ -35,13 +33,13 @@ define(['jquery', 'mediator', 'base-filter'], function($, sandbox, BaseFilter) {
         var sigma = 10;
         return (1/(2*Math.PI*sigma*sigma)) * Math.exp(-((x*x+y*y)/(2*sigma*sigma)));
     };
-    Gaussian.prototype.fillFilterMatrix = function(value) {
+    Gaussian.prototype.fillFilterMatrix = function() {
         var i, j;
-        for (i=-value;i<=value;i++) {
+        for (i=-this.filterLength;i<=this.filterLength;i++) {
             if (!this.filterMatrix[i]) {
                 this.filterMatrix[i] = [];
             }
-            for (j=-value;j<=value;j++) {
+            for (j=-this.filterLength;j<=this.filterLength;j++) {
                 this.filterMatrix[i][j] = this.getFilterValue(i, j);
             }
         }

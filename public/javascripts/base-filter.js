@@ -6,6 +6,7 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
         this.imgData;
         this.adaptedImg;
         this.filteredAdaptedImg;
+        this.filterLength;
         this.scaleRange = {
             min: 0,
             max: 100,
@@ -34,6 +35,7 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
         },
         beforeSliderChangeHandler: function(e, ui) {
             $('#filter-value-' + this.filterName).html(ui.value);
+            this.filterLength = ui.value;
             this.sliderChangeHandler(e, ui);
         },
         saveOriginImg: function(e) {
