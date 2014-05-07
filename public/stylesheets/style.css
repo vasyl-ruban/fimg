@@ -23,10 +23,6 @@ a {
 }
 
 #canvas {
-    min-height: 630px;
-    min-width: 900px;
-    width: 600px;
-    height: 400px;
 }
 
 .filter-name {

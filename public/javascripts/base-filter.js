@@ -24,8 +24,8 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
                 min: this.scaleRange.min,
                 max: this.scaleRange.max,
                 step: this.scaleRange.step,
-                change: this.beforeSliderChangeHandler.bind(this),
-                slide: this.beforeSliderChangeHandler.bind(this)
+                change: this.beforeSliderChangeHandler.bind(this)
+//                slide: this.beforeSliderChangeHandler.bind(this)
             });
         },
         subscribeToEvents: function() {
@@ -39,7 +39,7 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
         saveOriginImg: function(e) {
             this.imgData = e.img;
             this.adaptedImg = new Adapter(e.img, e.width, e.height);
-            this.filteredAdaptedImg = new Adapter(e.img, e.width, e.height);
+            this.filteredAdaptedImg = new Adapter(e.ctx.createImageData(e.width, e.height), e.width, e.height);
         }
     };
     return BaseFilter;
