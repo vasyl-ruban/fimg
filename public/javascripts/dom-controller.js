@@ -34,7 +34,7 @@ define(['jquery', 'mediator'], function($, sandbox) {
             this.fileImg.src = this.fileContentURL;
         },
         downloadedFileImgReady: function() {
-            this.sandbox.publish('renderImg', {img: this.fileImg});
+            this.sandbox.publish('renderImg', {img: this.fileImg, type: 'justLoaded'});
         }
     };
 
