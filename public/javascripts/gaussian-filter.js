@@ -1,6 +1,7 @@
-define(['jquery', 'base-filter'], function($, BaseFilter) {
+define(['base-filter', 'shared-gaussian', 'img-adapter-shared'], function(BaseFilter, SharedGaussian, AdapterShared) {
 
     var Gaussian = function() {
+        SharedGaussian.call(this);
         this.filterName = 'gaussian';
         this.filterFullName = 'Gaussian blur';
         this.scaleRange = {
@@ -8,9 +9,16 @@ define(['jquery', 'base-filter'], function($, BaseFilter) {
             max:10,
             step: 1
         };
+
         this.filteredImg = [];
         this.filterMatrix = [];
         this.filterLength = 0;
+
+        this.workersResults = [];
+        this.workers = [];
+        this.workerCount = 2;
+        this.workerScriptName = '/javascripts/gaussian-worker.js';
+
         this.init();
         this.subscribeToEvents();
     };
@@ -20,93 +28,47 @@ define(['jquery', 'base-filter'], function($, BaseFilter) {
 
     Gaussian.prototype.sliderChangeHandler = function(e, ui) {
         var value = ui.value
-            , currentVal
-            , i, j, r, g, b, a;
-        this.fillFilterMatrix();
-        this.normalizeFilterMatrix();
-        console.log(this.filterMatrix);
-        for (i=0;i<this.adaptedImg.height;i++) {
-            for (j=0;j<this.adaptedImg.width;j++) {
-                this.filteredAdaptedImg.set(i, j, this.getPixelValue(i, j));
-            }
-        }
-        this.sandbox.publish('renderArrayImg', {img: this.filteredAdaptedImg.img});
-    };
+            , currentWorker
+            , workerHeight = this.adaptedImg.height/this.workerCount
+            , i;
 
-    Gaussian.prototype.getFilterValue = function(x, y) {
-        var sigma = 10;
-        return (1/(2*Math.PI*sigma*sigma)) * Math.exp(-((x*x+y*y)/(2*sigma*sigma)));
-    };
-
-    Gaussian.prototype.fillFilterMatrix = function() {
-        var i, j;
-        for (i=-this.filterLength;i<=this.filterLength;i++) {
-            if (!this.filterMatrix[i]) {
-                this.filterMatrix[i] = [];
+        for (i=0; i<this.workerCount; i++) {
+            if (!this.workers[i]) {
+                this.workers[i] = new Worker(this.workerScriptName);
+                this.workers[i].addEventListener('message', this.workerFinishHandler.bind(this));
             }
-            for (j=-this.filterLength;j<=this.filterLength;j++) {
-                this.filterMatrix[i][j] = this.getFilterValue(i, j);
-            }
+            this.workers[i].postMessage(JSON.stringify({
+                gaussian: this,
+                from: workerHeight*i,
+                to: workerHeight*(i+1)
+            }));
         }
     };
 
-    Gaussian.prototype.normalizeFilterMatrix = function() {
-        var i, j, totalVal = 0;
-        for (i=-this.filterLength; i<=this.filterLength; i++) {
-            for (j=-this.filterLength; j<=this.filterLength; j++) {
-                totalVal += this.filterMatrix[i][j];
+    Gaussian.prototype.workerFinishHandler = function(e) {
+        var i, j, k
+            , currentResult
+            , data = JSON.parse(e.data);
+        this.workersResults.push(data);
+        if (this.workersResults.length == this.workerCount) {
+            this.workersResults.sort(function(a,b) {
+               return a.from - b.from;
+            });
+            for (k=0; k< this.workerCount; k++) {
+                currentResult = this.workersResults[k];
+                this.sandbox
+                    .publish('renderArrayImg', {
+                        img: currentResult.img.img,
+                        from: currentResult.from,
+                        to: currentResult.to
+                    });
             }
-        }
-        for (i=-this.filterLength; i<=this.filterLength; i++) {
-            for (j=-this.filterLength; j<=this.filterLength; j++) {
-                this.filterMatrix[i][j] = this.filterMatrix[i][j]/totalVal;
-            }
+            this.workersResults = [];
         }
     };
 
-    Gaussian.prototype.getValue = function(i, j, coefficient) {
-        var pixVal = this.adaptedImg.get(i, j)
-            , pixValRes = {};
-        if (!pixVal) {
-            return null;
-        }
-        pixValRes.r = pixVal.r*coefficient;
-        pixValRes.g = pixVal.g*coefficient;
-        pixValRes.b = pixVal.b*coefficient;
-        pixValRes.a = pixVal.a*coefficient;
-        return pixValRes;
-    };
+    var gaussian = new Gaussian;
 
-    Gaussian.prototype.getPixelValue = function(i,j) {
-        var k
-            , l
-            , r = 0
-            , g = 0
-            , b = 0
-            , a = 0
-            , temp = [];
-        for (k=-this.filterLength; k<=this.filterLength; k++) {
-            for (l=-this.filterLength; l<=this.filterLength; l++) {
-                temp.push(this.getValue(i+k,j+l,this.filterMatrix[k][l]));
-            }
-        }
-        for (i=0;i<temp.length;i++) {
-            if (!temp[i]) {
-                continue;
-            }
-            r += temp[i].r;
-            g += temp[i].g;
-            b += temp[i].b;
-            a += temp[i].a;
-        }
-        return {
-            r: r,
-            g: g,
-            b: b,
-            a: 255
-        };
-    };
-
-    return new Gaussian;
+    return gaussian;
 
 });

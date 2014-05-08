@@ -3,6 +3,20 @@ requirejs.config({
     paths: {
         jquery: '//code.jquery.com/jquery-1.10.2',
         jqueryUI: '//code.jquery.com/ui/1.10.4/jquery-ui'
+    },
+    shim: {
+        'shared-gaussian': {
+            exports: 'SharedGaussian',
+            init: function() {
+                return SharedGaussian;
+            }
+        },
+        'img-adapter-shared': {
+            exports: 'AdapterShared',
+            init: function() {
+                return AdapterShared;
+            }
+        }
     }
 });
 

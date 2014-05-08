@@ -36,10 +36,12 @@ define(['jquery', 'mediator'], function($, sandbox) {
         },
 
         renderArrayImg: function(e) {
-            this.ctx.putImageData(e.img, 0, 0);
-            for (var i=0;i<10;i++) {
-                console.log(e.img.data[i]);
+            var tempData = this.ctx.createImageData(e.img.width, e.to-e.from)
+                , i, j;
+            for (i=e.from*4*e.img.width; i<e.to*4* e.img.width; i++) {
+                    tempData.data[i-e.from*4*e.img.width] = e.img.data[i];
             }
+            this.ctx.putImageData(tempData, 0, e.from, 0, 0, tempData.width, tempData.height);
         }
 
     };

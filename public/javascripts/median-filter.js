@@ -1,4 +1,4 @@
-define(['jquery', 'base-filter'], function($, BaseFilter) {
+define(['base-filter'], function(BaseFilter) {
 
     var Median = function() {
         this.filterName = 'median';
