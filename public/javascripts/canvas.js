@@ -1,4 +1,5 @@
 define(['jquery', 'mediator'], function($, sandbox) {
+
     var Canvas = function() {
         this.sandbox = sandbox;
         this.$canvas = $('#canvas');
@@ -6,12 +7,15 @@ define(['jquery', 'mediator'], function($, sandbox) {
         this.originImg = new Image;
         this.subscribeToEvents();
     };
+
     Canvas.prototype = {
+
         subscribeToEvents: function() {
             this.sandbox
                 .subscribe('renderImg', this, this.renderImg)
                 .subscribe('renderArrayImg', this, this.renderArrayImg);
         },
+
         renderImg: function(e) {
             this.originImg = e.img;
             this.ctx.drawImage(
@@ -30,13 +34,16 @@ define(['jquery', 'mediator'], function($, sandbox) {
                 });
             }
         },
+
         renderArrayImg: function(e) {
             this.ctx.putImageData(e.img, 0, 0);
             for (var i=0;i<10;i++) {
                 console.log(e.img.data[i]);
             }
         }
+
     };
 
     return new Canvas;
+
 });

@@ -1,4 +1,5 @@
 define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
+
     var BaseFilter = function() {
         this.sandbox = sandbox;
         this.$filtersControlHolder = $('.left-side');
@@ -13,7 +14,9 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
             step: 5
         };
     };
+
     BaseFilter.prototype = {
+
         init: function() {
             if (this.filterName === '') {
                 return false;
@@ -29,20 +32,26 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
 //                slide: this.beforeSliderChangeHandler.bind(this)
             });
         },
+
         subscribeToEvents: function() {
             this.sandbox
                 .subscribe('saveOriginalImg', this, this.saveOriginImg);
         },
+
         beforeSliderChangeHandler: function(e, ui) {
             $('#filter-value-' + this.filterName).html(ui.value);
             this.filterLength = ui.value;
             this.sliderChangeHandler(e, ui);
         },
+
         saveOriginImg: function(e) {
             this.imgData = e.img;
             this.adaptedImg = new Adapter(e.img, e.width, e.height);
             this.filteredAdaptedImg = new Adapter(e.ctx.createImageData(e.width, e.height), e.width, e.height);
         }
+
     };
+
     return BaseFilter;
+
 });

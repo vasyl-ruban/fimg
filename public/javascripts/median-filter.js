@@ -1,4 +1,5 @@
 define(['jquery', 'base-filter'], function($, BaseFilter) {
+
     var Median = function() {
         this.filterName = 'median';
         this.filterFullName = 'Median filter';
@@ -11,6 +12,7 @@ define(['jquery', 'base-filter'], function($, BaseFilter) {
         this.init();
         this.subscribeToEvents();
     };
+
     Median.prototype = new BaseFilter;
     Median.prototype.constructor = Median;
 
@@ -23,6 +25,7 @@ define(['jquery', 'base-filter'], function($, BaseFilter) {
         }
         this.sandbox.publish('renderArrayImg', {img: this.filteredAdaptedImg.img});
     };
+
     Median.prototype.getPixelValue = function(i, j) {
         var k, l, tempR = [], tempG = [], tempB = [], r, g, b, currentPx;
         var sortFunction = function(a, b) {
@@ -48,5 +51,7 @@ define(['jquery', 'base-filter'], function($, BaseFilter) {
             a: 255
         }
     };
+
     return new Median;
+
 });

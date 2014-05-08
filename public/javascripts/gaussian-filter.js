@@ -1,4 +1,5 @@
 define(['jquery', 'base-filter'], function($, BaseFilter) {
+
     var Gaussian = function() {
         this.filterName = 'gaussian';
         this.filterFullName = 'Gaussian blur';
@@ -13,8 +14,10 @@ define(['jquery', 'base-filter'], function($, BaseFilter) {
         this.init();
         this.subscribeToEvents();
     };
+
     Gaussian.prototype = new BaseFilter;
     Gaussian.prototype.constructor = Gaussian;
+
     Gaussian.prototype.sliderChangeHandler = function(e, ui) {
         var value = ui.value
             , currentVal
@@ -29,10 +32,12 @@ define(['jquery', 'base-filter'], function($, BaseFilter) {
         }
         this.sandbox.publish('renderArrayImg', {img: this.filteredAdaptedImg.img});
     };
+
     Gaussian.prototype.getFilterValue = function(x, y) {
         var sigma = 10;
         return (1/(2*Math.PI*sigma*sigma)) * Math.exp(-((x*x+y*y)/(2*sigma*sigma)));
     };
+
     Gaussian.prototype.fillFilterMatrix = function() {
         var i, j;
         for (i=-this.filterLength;i<=this.filterLength;i++) {
@@ -44,6 +49,7 @@ define(['jquery', 'base-filter'], function($, BaseFilter) {
             }
         }
     };
+
     Gaussian.prototype.normalizeFilterMatrix = function() {
         var i, j, totalVal = 0;
         for (i=-this.filterLength; i<=this.filterLength; i++) {
@@ -57,6 +63,7 @@ define(['jquery', 'base-filter'], function($, BaseFilter) {
             }
         }
     };
+
     Gaussian.prototype.getValue = function(i, j, coefficient) {
         var pixVal = this.adaptedImg.get(i, j)
             , pixValRes = {};
@@ -69,6 +76,7 @@ define(['jquery', 'base-filter'], function($, BaseFilter) {
         pixValRes.a = pixVal.a*coefficient;
         return pixValRes;
     };
+
     Gaussian.prototype.getPixelValue = function(i,j) {
         var k
             , l
@@ -100,4 +108,5 @@ define(['jquery', 'base-filter'], function($, BaseFilter) {
     };
 
     return new Gaussian;
+
 });

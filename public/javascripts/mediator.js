@@ -1,4 +1,5 @@
 define(function() {
+
     /*
      * Create mediator which provide module isolation.
      * Each module know only about mediator,
@@ -8,7 +9,9 @@ define(function() {
     var Mediator = function() {
         this.items = [];
     };
+
     Mediator.prototype = {
+
         /*
          * Subscribe <callback> to event called <name> with context <context>
          * @param {string} name
@@ -39,7 +42,9 @@ define(function() {
             }
             return this;
         }
+
     };
 
     return new Mediator;
+
 });
