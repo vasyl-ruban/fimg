@@ -3,8 +3,18 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
     var BaseFilter = function() {
         this.sandbox = sandbox;
         this.$filtersControlHolder = $('.left-side');
-        this.filterName = '';
-        this.imgData;
+
+        this.filters = [
+            {
+                name: 'gaussian',
+                fullName: 'Gaussian blur'
+            },
+            {
+                name: 'median',
+                fullName: 'Median filter'
+            }
+        ];
+
         this.adaptedImg;
         this.filteredAdaptedImg;
         this.filterLength;
@@ -16,27 +26,30 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
 
         this.scaleRange = {
             min: 0,
-            max: 100,
-            step: 5
+            max: 10,
+            step: 1
         };
+
+        this.init();
+        this.subscribeToEvents();
     };
 
     BaseFilter.prototype = {
 
         init: function() {
-            if (this.filterName === '') {
-                return false;
+            var i;
+            for (i=0; i<this.filters.length; i++) {
+
+                this.$filtersControlHolder.append(
+                    '<div><div class="filter-name">' + this.filters[i].fullName + ': <span id="filter-value-' + this.filters[i].name + '">0</span></span></div><div class="filter" id="' + this.filters[i].name + '"></div></div>'
+                );
+                $('#' + this.filters[i].name).slider({
+                    min: this.scaleRange.min,
+                    max: this.scaleRange.max,
+                    step: this.scaleRange.step,
+                    change: this.sliderChangeHandler.bind(this, this.filters[i].name)
+                });
             }
-            this.$filtersControlHolder.append(
-                '<div><div class="filter-name">' + this.filterFullName + ': <span id="filter-value-' + this.filterName + '">0</span></span></div><div class="filter" id="' + this.filterName + '"></div></div>'
-            );
-            $('#' + this.filterName).slider({
-                min: this.scaleRange.min,
-                max: this.scaleRange.max,
-                step: this.scaleRange.step,
-                change: this.sliderChangeHandler.bind(this)
-//                slide: this.beforeSliderChangeHandler.bind(this)
-            });
         },
 
         subscribeToEvents: function() {
@@ -44,13 +57,11 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
                 .subscribe('saveOriginalImg', this, this.saveOriginImg);
         },
 
-        sliderChangeHandler: function(e, ui) {
+        sliderChangeHandler: function(filterName, e, ui) {
             var value = ui.value
-                , currentWorker
                 , workerHeight = this.adaptedImg.height/this.workerCount
                 , i;
-
-            $('#filter-value-' + this.filterName).html(ui.value);
+            $('#filter-value-' + filterName).html(ui.value);
             this.filterLength = ui.value;
 
             for (i=0; i<this.workerCount; i++) {
@@ -59,16 +70,18 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
                     this.workers[i].addEventListener('message', this.workerFinishHandler.bind(this));
                 }
                 this.workers[i].postMessage(JSON.stringify({
-                    filter: this,
+                    img: this.adaptedImg,
                     from: workerHeight*i,
-                    to: workerHeight*(i+1)
+                    to: workerHeight*(i+1),
+                    filterName: filterName,
+                    filterLength: this.filterLength
                 }));
             }
 
         },
 
         workerFinishHandler: function(e) {
-            var i, j, k
+            var i
                 , currentResult
                 , data = JSON.parse(e.data);
             this.workersResults.push(data);
@@ -76,8 +89,8 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
                 this.workersResults.sort(function(a,b) {
                     return a.from - b.from;
                 });
-                for (k=0; k< this.workerCount; k++) {
-                    currentResult = this.workersResults[k];
+                for (i=0; i< this.workerCount; i++) {
+                    currentResult = this.workersResults[i];
                     this.sandbox
                         .publish('renderArrayImg', {
                             img: currentResult.img.img,
@@ -90,13 +103,12 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
         },
 
         saveOriginImg: function(e) {
-            this.imgData = e.img;
             this.adaptedImg = new Adapter(e.img, e.width, e.height);
             this.filteredAdaptedImg = new Adapter(e.ctx.createImageData(e.width, e.height), e.width, e.height);
         }
 
     };
 
-    return BaseFilter;
+    return new BaseFilter;
 
 });

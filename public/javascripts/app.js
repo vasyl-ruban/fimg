@@ -6,10 +6,11 @@ requirejs.config({
     },
     shim: {
 
-        'shared-gaussian': {
-            exports: 'SharedGaussian',
+        'gaussian-filter': {
+            deps: ['img-adapter'],
+            exports: 'Gaussian',
             init: function() {
-                return SharedGaussian;
+                return Gaussian;
             }
         },
 
@@ -20,10 +21,10 @@ requirejs.config({
             }
         },
 
-        'img-adapter-shared': {
-            exports: 'AdapterShared',
+        'img-adapter': {
+            exports: 'Adapter',
             init: function() {
-                return AdapterShared;
+                return Adapter;
             }
         }
 

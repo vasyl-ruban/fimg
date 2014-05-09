@@ -1,21 +1,25 @@
-importScripts('/javascripts/shared-gaussian.js');
+importScripts('/javascripts/gaussian-filter.js');
 importScripts('/javascripts/shared-median.js');
-importScripts('/javascripts/img-adapter-shared.js');
+importScripts('/javascripts/img-adapter.js');
 
 addEventListener('message', function(e) {
     var data = JSON.parse(e.data)
-        , filter = data.filter
+        , filter
+        , img = data.img
         , from = data.from
-        , to = data.to;
+        , to = data.to
+        , filterName = data.filterName
+        , filterLength = data.filterLength;
 
-    if (filter.filterName == 'gaussian') {
-        SharedGaussian.call(filter);
-    }else if (filter.filterName == 'median') {
-        SharedMedian.call(filter);
+    if (filterName == 'gaussian') {
+        filter = new Gaussian(img, filterLength);
+//        SharedGaussian.call(filter);
+    }else if (filterName == 'median') {
+//        SharedMedian.call(filter);
     }
 
-    AdapterShared.call(filter.adaptedImg);
-    AdapterShared.call(filter.filteredAdaptedImg);
+//    AdapterShared.call(filter.adaptedImg);
+//    AdapterShared.call(filter.filteredAdaptedImg);
 
     filter.compute(from, to);
 
