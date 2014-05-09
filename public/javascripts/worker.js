@@ -1,6 +1,7 @@
+importScripts('/javascripts/img-adapter.js');
+importScripts('/javascripts/base-filter.js');
 importScripts('/javascripts/gaussian-filter.js');
 importScripts('/javascripts/median-filter.js');
-importScripts('/javascripts/img-adapter.js');
 
 addEventListener('message', function(e) {
     var data = JSON.parse(e.data)

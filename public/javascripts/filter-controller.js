@@ -1,6 +1,6 @@
 define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
 
-    var BaseFilter = function() {
+    var FilterController = function() {
         this.sandbox = sandbox;
         this.$filtersControlHolder = $('.left-side');
 
@@ -15,9 +15,9 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
             }
         ];
 
-        this.adaptedImg;
-        this.filteredAdaptedImg;
-        this.filterLength;
+        this.adaptedImg = {};
+        this.filteredAdaptedImg = {};
+        this.filterLength = {};
 
         this.workersResults = [];
         this.workers = [];
@@ -34,7 +34,7 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
         this.subscribeToEvents();
     };
 
-    BaseFilter.prototype = {
+    FilterController.prototype = {
 
         init: function() {
             var i;
@@ -109,6 +109,6 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
 
     };
 
-    return new BaseFilter;
+    return new FilterController;
 
 });
