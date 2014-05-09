@@ -13,7 +13,7 @@ requirejs.config({
             }
         },
 
-        'gaussian-filter': {
+        'filters/gaussian-filter': {
             deps: ['img-adapter', 'base-filter'],
             exports: 'Gaussian',
             init: function() {
@@ -21,7 +21,7 @@ requirejs.config({
             }
         },
 
-        'median-filter': {
+        'filters/median-filter': {
             daps: ['img-adapter', 'base-filter'],
             exports: 'Median',
             init: function() {
@@ -29,7 +29,15 @@ requirejs.config({
             }
         },
 
-        'img-adapter': {
+        'filters/noise-filter': {
+            daps: ['img-adapter', 'base-filter'],
+            exports: 'Median',
+            init: function() {
+                return Noise;
+            }
+        },
+
+        'filters/img-adapter': {
             exports: 'Adapter',
             init: function() {
                 return Adapter;

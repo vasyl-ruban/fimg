@@ -1,8 +1,9 @@
 importScripts('/javascripts/mediator.js');
-importScripts('/javascripts/img-adapter.js');
-importScripts('/javascripts/base-filter.js');
-importScripts('/javascripts/gaussian-filter.js');
-importScripts('/javascripts/median-filter.js');
+importScripts('/javascripts/filters/img-adapter.js');
+importScripts('/javascripts/filters/base-filter.js');
+importScripts('/javascripts/filters/gaussian-filter.js');
+importScripts('/javascripts/filters/median-filter.js');
+importScripts('/javascripts/filters/noise-filter.js');
 
 addEventListener('message', function(e) {
 
@@ -30,6 +31,8 @@ addEventListener('message', function(e) {
         filter = new Gaussian(img, filterLength, sandbox);
     } else if (filterName == 'median') {
         filter = new Median(img, filterLength, sandbox);
+    } else if (filterName == 'noise') {
+        filter = new Noise(img, filterLength, sandbox);
     }
 
     filter.compute(from, to);

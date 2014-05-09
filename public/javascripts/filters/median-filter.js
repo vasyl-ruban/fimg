@@ -6,17 +6,6 @@ var Median = function(img, filterLength, sandbox) {
 
 Median.prototype = new Filter;
 
-Median.prototype.compute = function(from, to) {
-    var i, j;
-    for (i=from-this.filterIteration;i<to+this.filterIteration;i++) {
-        for (j=0;j<this.adaptedImg.width;j++) {
-            this.filteredAdaptedImg.set(i, j, this.getPixelValue(i, j));
-        }
-        this.sandbox
-            .publish('progress', {value: ((i-from)/(to-from))*100});
-    }
-};
-
 Median.prototype.getPixelValue = function(i, j) {
     var k, l, tempR = [], tempG = [], tempB = [], r, g, b, currentPx;
     var sortFunction = function(a, b) {

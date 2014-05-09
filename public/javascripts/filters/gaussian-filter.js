@@ -12,10 +12,9 @@ var Gaussian = function(img, filterLength, sandbox) {
 Gaussian.prototype = new Filter;
 
 Gaussian.prototype.compute = function(from, to) {
-    var k;
+    var i, j, k;
     for (k=0; k<this.filterIteration; k++) {
-        var i, j;
-        for (i=from-this.filterIteration;i<to+this.filterIteration;i++) {
+        for (i=from-10;i<to+10;i++) {
             for (j=0;j<this.adaptedImg.width;j++) {
                 this.filteredAdaptedImg.set(i, j, this.getPixelValue(i, j));
             }

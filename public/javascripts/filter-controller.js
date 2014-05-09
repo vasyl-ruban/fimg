@@ -1,4 +1,4 @@
-define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
+define(['jquery', 'mediator', 'filters/img-adapter'], function($, sandbox, Adapter) {
 
     var FilterController = function() {
         this.sandbox = sandbox;
@@ -12,6 +12,10 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
             'median': {
                 name: 'median',
                 fullName: 'Median filter'
+            },
+            'noise': {
+                name: 'noise',
+                fullName: 'Noise filter'
             }
         };
 

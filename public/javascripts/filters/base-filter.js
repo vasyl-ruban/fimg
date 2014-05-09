@@ -11,8 +11,15 @@ var Filter = function(img, filterLength, sandbox) {
 
 Filter.prototype = {
 
-    originCompute: function(from, to) {
-
+    compute: function(from, to) {
+        var i, j;
+        for (i=from;i<to;i++) {
+            for (j=0;j<this.adaptedImg.width;j++) {
+                this.filteredAdaptedImg.set(i, j, this.getPixelValue(i, j));
+            }
+            this.sandbox
+                .publish('progress', {value: ((i-from)/(to-from))*100});
+        }
     }
 
 };
