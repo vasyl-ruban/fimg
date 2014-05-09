@@ -1,7 +1,5 @@
 var Gaussian = function(img, filterLength) {
 
-    this.filterName = 'gaussian';
-
     this.adaptedImg = new Adapter(img.img, img.width, img.height);
     this.filteredAdaptedImg = new Adapter({data:[], width: img.width, height: img.height}, img.width, img.height);
     this.filterLength = filterLength;

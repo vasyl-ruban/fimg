@@ -14,10 +14,11 @@ requirejs.config({
             }
         },
 
-        'shared-median': {
-            exports: 'SharedMedian',
+        'median-filter': {
+            daps: ['img-adapter'],
+            exports: 'Median',
             init: function() {
-                return SharedMedian;
+                return Median;
             }
         },
 
@@ -34,8 +35,7 @@ requirejs.config({
 requirejs([
     'jquery', 'mediator',
     'dom-controller', 'canvas',
-    'jqueryUI', 'gaussian-filter',
-    'median-filter'
+    'jqueryUI', 'filter-controller'
 ],
 function($, sandbox) {
 

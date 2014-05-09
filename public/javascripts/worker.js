@@ -1,5 +1,5 @@
 importScripts('/javascripts/gaussian-filter.js');
-importScripts('/javascripts/shared-median.js');
+importScripts('/javascripts/median-filter.js');
 importScripts('/javascripts/img-adapter.js');
 
 addEventListener('message', function(e) {
@@ -13,13 +13,9 @@ addEventListener('message', function(e) {
 
     if (filterName == 'gaussian') {
         filter = new Gaussian(img, filterLength);
-//        SharedGaussian.call(filter);
     }else if (filterName == 'median') {
-//        SharedMedian.call(filter);
+        filter = new Median(img, filterLength);
     }
-
-//    AdapterShared.call(filter.adaptedImg);
-//    AdapterShared.call(filter.filteredAdaptedImg);
 
     filter.compute(from, to);
 
