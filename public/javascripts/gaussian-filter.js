@@ -9,7 +9,7 @@ var Gaussian = function(img, filterLength) {
 
 };
 
-Gaussian.prototype = Filter.prototype;
+Gaussian.prototype = new Filter;
 
 Gaussian.prototype.getFilterValue =  function(x, y) {
     var sigma = 10;

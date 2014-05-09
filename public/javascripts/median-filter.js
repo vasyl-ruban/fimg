@@ -4,7 +4,7 @@ var Median = function(img, filterLength) {
 
 };
 
-Median.prototype = Filter.prototype;
+Median.prototype = new Filter;
 
 Median.prototype.getPixelValue = function(i, j) {
     var k, l, tempR = [], tempG = [], tempB = [], r, g, b, currentPx;
