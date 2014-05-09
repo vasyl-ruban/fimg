@@ -4,16 +4,16 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
         this.sandbox = sandbox;
         this.$filtersControlHolder = $('.left-side');
 
-        this.filters = [
-            {
+        this.filters = {
+            'gaussian': {
                 name: 'gaussian',
                 fullName: 'Gaussian blur'
             },
-            {
+            'median': {
                 name: 'median',
                 fullName: 'Median filter'
             }
-        ];
+        };
 
         this.adaptedImg = {};
         this.filteredAdaptedImg = {};
@@ -38,8 +38,7 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
 
         init: function() {
             var i;
-            for (i=0; i<this.filters.length; i++) {
-
+            for (i in this.filters) {
                 this.$filtersControlHolder.append(
                     '<div><div class="filter-name">' + this.filters[i].fullName + ': <span id="filter-value-' + this.filters[i].name + '">0</span></span></div><div class="filter" id="' + this.filters[i].name + '"></div></div>'
                 );
@@ -67,6 +66,7 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
             for (i=0; i<this.workerCount; i++) {
                 if (!this.workers[i]) {
                     this.workers[i] = new Worker(this.workerScriptName);
+                    this.workers[i].value = 0;
                     this.workers[i].addEventListener('message', this.workerMessageHandler.bind(this));
                 }
                 this.workers[i].postMessage(JSON.stringify({
@@ -116,7 +116,6 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
                         });
                 }
                 this.workersResults = [];
-                this.filterProgress = [];
             }
         },
 

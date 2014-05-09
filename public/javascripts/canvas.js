@@ -13,7 +13,9 @@ define(['jquery', 'mediator'], function($, sandbox) {
         subscribeToEvents: function() {
             this.sandbox
                 .subscribe('renderImg', this, this.renderImg)
-                .subscribe('renderArrayImg', this, this.renderArrayImg);
+                .subscribe('renderArrayImg', this, this.renderArrayImg)
+                .subscribe('getImageData', this, this.publishImageData)
+            ;
         },
 
         renderImg: function(e) {
@@ -26,12 +28,7 @@ define(['jquery', 'mediator'], function($, sandbox) {
                 this.$canvas.height()
             );
             if (e.type === 'justLoaded') {
-                this.sandbox.publish('saveOriginalImg', {
-                    img: this.ctx.getImageData(0, 0, this.$canvas.width(), this.$canvas.height()),
-                    width: this.$canvas.width(),
-                    height: this.$canvas.height(),
-                    ctx: this.ctx
-                });
+                this.publishImageData();
             }
         },
 
@@ -42,6 +39,16 @@ define(['jquery', 'mediator'], function($, sandbox) {
                     tempData.data[i-e.from*4*e.img.width] = e.img.data[i];
             }
             this.ctx.putImageData(tempData, 0, e.from, 0, 0, tempData.width, tempData.height);
+            this.publishImageData();
+        },
+
+        publishImageData: function() {
+            this.sandbox.publish('saveOriginalImg', {
+                img: this.ctx.getImageData(0, 0, this.$canvas.width(), this.$canvas.height()),
+                width: this.$canvas.width(),
+                height: this.$canvas.height(),
+                ctx: this.ctx
+            });
         }
 
     };

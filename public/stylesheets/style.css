@@ -35,10 +35,11 @@ a {
 
 .progress-bar-holder {
     width: 95%;
-    height: 15px;
+    height: 12px;
     margin-bottom: 10px;
     border: 1px solid darkblue;
     overflow: hidden;
+    border-radius: 5px;
 }
 #progress-bar {
     background-color: #00B7FF;
