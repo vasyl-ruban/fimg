@@ -4,6 +4,7 @@ importScripts('/javascripts/gaussian-filter.js');
 importScripts('/javascripts/median-filter.js');
 
 addEventListener('message', function(e) {
+
     var data = JSON.parse(e.data)
         , filter
         , img = data.img
@@ -13,9 +14,13 @@ addEventListener('message', function(e) {
         , filterLength = data.filterLength;
 
     if (filterName == 'gaussian') {
+
         filter = new Gaussian(img, filterLength);
-    }else if (filterName == 'median') {
+
+    } else if (filterName == 'median') {
+
         filter = new Median(img, filterLength);
+
     }
 
     filter.compute(from, to);

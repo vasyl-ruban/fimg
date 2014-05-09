@@ -7,7 +7,7 @@ requirejs.config({
     shim: {
 
         'gaussian-filter': {
-            deps: ['img-adapter'],
+            deps: ['img-adapter', 'base-filter'],
             exports: 'Gaussian',
             init: function() {
                 return Gaussian;
@@ -15,7 +15,7 @@ requirejs.config({
         },
 
         'median-filter': {
-            daps: ['img-adapter'],
+            daps: ['img-adapter', 'base-filter'],
             exports: 'Median',
             init: function() {
                 return Median;
