@@ -32,3 +32,15 @@ a {
 .filter {
     margin-right: 10px;
 }
+
+.progress-bar-holder {
+    width: 95%;
+    height: 15px;
+    margin-bottom: 10px;
+    border: 1px solid darkblue;
+    overflow: hidden;
+}
+#progress-bar {
+    background-color: #00B7FF;
+    height: 15px;
+}

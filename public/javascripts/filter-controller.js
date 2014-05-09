@@ -67,23 +67,40 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
             for (i=0; i<this.workerCount; i++) {
                 if (!this.workers[i]) {
                     this.workers[i] = new Worker(this.workerScriptName);
-                    this.workers[i].addEventListener('message', this.workerFinishHandler.bind(this));
+                    this.workers[i].addEventListener('message', this.workerMessageHandler.bind(this));
                 }
                 this.workers[i].postMessage(JSON.stringify({
                     img: this.adaptedImg,
                     from: workerHeight*i,
                     to: workerHeight*(i+1),
                     filterName: filterName,
-                    filterLength: this.filterLength
+                    filterLength: this.filterLength,
+                    workerIndex: i
                 }));
             }
 
         },
 
-        workerFinishHandler: function(e) {
-            var i
-                , currentResult
+        workerMessageHandler: function(e) {
+            var i, val = 0
                 , data = JSON.parse(e.data);
+            if (data.message == 'loaderChange') {
+                this.workers[data.workerIndex].value = data.value/this.workerCount;
+
+                for (i=0; i<this.workerCount; i++) {
+                    val += this.workers[i].value;
+                }
+                this.sandbox
+                    .publish('loaderChanged', {value: val});
+
+            } else {
+                this.workerFinishHandler(data);
+            }
+        },
+
+        workerFinishHandler: function(data) {
+            var i
+                , currentResult;
             this.workersResults.push(data);
             if (this.workersResults.length == this.workerCount) {
                 this.workersResults.sort(function(a,b) {
@@ -99,6 +116,7 @@ define(['jquery', 'mediator', 'img-adapter'], function($, sandbox, Adapter) {
                         });
                 }
                 this.workersResults = [];
+                this.filterProgress = [];
             }
         },
 

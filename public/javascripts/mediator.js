@@ -1,5 +1,3 @@
-define(function() {
-
     /*
      * Create mediator which provide module isolation.
      * Each module know only about mediator,
@@ -44,7 +42,3 @@ define(function() {
         }
 
     };
-
-    return new Mediator;
-
-});

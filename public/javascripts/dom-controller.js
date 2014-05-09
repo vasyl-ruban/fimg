@@ -47,6 +47,27 @@ define(['jquery', 'mediator'], function($, sandbox) {
 
     };
 
+    var ProgressBar = function() {
+        this.sandbox = sandbox;
+        this.$holder = $('#progress-bar');
+        this.bindToEvents();
+    };
+
+    ProgressBar.prototype = {
+
+        bindToEvents: function() {
+            this.sandbox
+                .subscribe('loaderChanged', this, this.changeValue);
+        },
+
+        changeValue: function(options) {
+            var val = options.value;
+
+            this.$holder.css('width', val + '%');
+        }
+    };
+
+    var progressBar = new ProgressBar;
     var file = new File;
 
     $canvas.on('dragover', file.fileDragOverHandler.bind(file));

@@ -6,6 +6,13 @@ requirejs.config({
     },
     shim: {
 
+        'mediator': {
+            exports: 'mediator',
+            init: function() {
+                return new Mediator();
+            }
+        },
+
         'gaussian-filter': {
             deps: ['img-adapter', 'base-filter'],
             exports: 'Gaussian',

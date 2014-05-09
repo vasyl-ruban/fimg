@@ -1,6 +1,6 @@
-var Gaussian = function(img, filterLength) {
+var Gaussian = function(img, filterLength, sandbox) {
 
-    Filter.call(this, img, filterLength);
+    Filter.call(this, img, filterLength, sandbox);
 
     this.filterMatrix = [];
 
@@ -10,6 +10,21 @@ var Gaussian = function(img, filterLength) {
 };
 
 Gaussian.prototype = new Filter;
+
+Gaussian.prototype.compute = function(from, to) {
+    var k;
+    for (k=0; k<this.filterIteration; k++) {
+        var i, j;
+        for (i=from-this.filterIteration;i<to+this.filterIteration;i++) {
+            for (j=0;j<this.adaptedImg.width;j++) {
+                this.filteredAdaptedImg.set(i, j, this.getPixelValue(i, j));
+            }
+            this.sandbox
+                .publish('progress', {value: (((i-from)/((to-from)*this.filterIteration))+(k/this.filterIteration))*100});
+        }
+        this.adaptedImg = new Adapter(this.filteredAdaptedImg.img, this.filteredAdaptedImg.width, this.filteredAdaptedImg.height);
+    }
+};
 
 Gaussian.prototype.getFilterValue =  function(x, y) {
     var sigma = 10;
