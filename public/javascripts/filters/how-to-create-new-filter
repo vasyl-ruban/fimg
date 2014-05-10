@@ -1,0 +1,8 @@
+for creating new filter:
+1) create new file in the filters folder;
+2) create constructor for this filter in this file;
+3) aggregate base filter in the new filter;
+4) extend new filter prototype with base filter functions;
+5) override compute function (if you need), and getPixelValue;
+6) add new filter to the filter controller (look at the 12 line);
+7) add new filter to the worker file (look at the 1 and 28 line).

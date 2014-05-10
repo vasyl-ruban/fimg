@@ -1,5 +1,9 @@
 define(['jquery', 'mediator'], function($, sandbox) {
 
+    /*
+     * constructor for object which will
+     * provide interaction between canvas and another modules
+     */
     var Canvas = function() {
         this.sandbox = sandbox;
         this.$canvas = $('#canvas');
@@ -10,6 +14,9 @@ define(['jquery', 'mediator'], function($, sandbox) {
 
     Canvas.prototype = {
 
+        /*
+         * subscribing to events
+         */
         subscribeToEvents: function() {
             this.sandbox
                 .subscribe('renderImg', this, this.renderImg)
@@ -18,6 +25,10 @@ define(['jquery', 'mediator'], function($, sandbox) {
             ;
         },
 
+        /*
+         * render image which pass from event
+         * @param {object} e
+         */
         renderImg: function(e) {
             this.originImg = e.img;
             this.ctx.drawImage(
@@ -32,6 +43,10 @@ define(['jquery', 'mediator'], function($, sandbox) {
             }
         },
 
+        /*
+         * render part of the image
+         * @param {object} e
+         */
         renderArrayImg: function(e) {
             var tempData = this.ctx.createImageData(e.img.width, e.to-e.from)
                 , i, j;
@@ -42,6 +57,10 @@ define(['jquery', 'mediator'], function($, sandbox) {
             this.publishImageData();
         },
 
+        /*
+         * generate event which will send current image, rendered in the canvas
+         * to all subscribers
+         */
         publishImageData: function() {
             this.sandbox.publish('saveOriginalImg', {
                 img: this.ctx.getImageData(0, 0, this.$canvas.width(), this.$canvas.height()),

@@ -1,28 +1,42 @@
 define(['jquery', 'mediator'], function($, sandbox) {
 
-    var $canvas = $('html');
-
+    /*
+     * constructor for object which provides drag and drop system
+     */
     var File = function() {
         this.sandbox = sandbox;
+        this.$holder = $('html');
         this.file;
         this.fileContentURL;
         this.fileImg = new Image;
-        this.fileImg.onload = this.downloadedFileImgReady.bind(this);
         this.fileReader = new FileReader();
         this.fileReader.onload = this.downloadedFileHandler.bind(this);
+        this.init();
     };
 
     File.prototype = {
 
-        subscribeToEvents: function() {
-
+        /*
+         * bind event handlers
+         */
+        init: function() {
+            this.$holder.on('dragover', this.fileDragOverHandler.bind(this));
+            this.$holder.on('drop', this.fileDropHandler.bind(this));
         },
 
+        /*
+         * handler for dragOver event
+         * @param {object} e
+         */
         fileDragOverHandler: function(e) {
             e.stopPropagation();
             e.preventDefault();
         },
 
+        /*
+         * while file drop, start downloading file
+         * @param {object} e
+         */
         fileDropHandler: function(e) {
             e.stopPropagation();
             e.preventDefault();
@@ -30,23 +44,31 @@ define(['jquery', 'mediator'], function($, sandbox) {
             this.downloadFile();
         },
 
+        /*
+         * downloading file in it is image file
+         */
         downloadFile: function() {
             if (this.file.type.match('image.*')){
                 this.fileReader.readAsDataURL(this.file);
             }
         },
 
+        /*
+         * handler which run while file downloaded
+         * generate event for rendering downloaded image
+         * @param {object} e
+         */
         downloadedFileHandler: function(e) {
             this.fileContentURL = e.target.result;
             this.fileImg.src = this.fileContentURL;
-        },
-
-        downloadedFileImgReady: function() {
             this.sandbox.publish('renderImg', {img: this.fileImg, type: 'justLoaded'});
         }
 
     };
 
+    /*
+     * constructor for object which will controlling progress bar
+     */
     var ProgressBar = function() {
         this.sandbox = sandbox;
         this.$holder = $('#progress-bar');
@@ -55,14 +77,20 @@ define(['jquery', 'mediator'], function($, sandbox) {
 
     ProgressBar.prototype = {
 
+        /*
+         * subscribe to events
+         */
         bindToEvents: function() {
             this.sandbox
                 .subscribe('loaderChanged', this, this.changeValue);
         },
 
+        /*
+         * change progress bar value
+         * @params {object} options
+         */
         changeValue: function(options) {
             var val = options.value;
-
             this.$holder.css('width', val + '%');
         }
     };
@@ -70,8 +98,7 @@ define(['jquery', 'mediator'], function($, sandbox) {
     var progressBar = new ProgressBar;
     var file = new File;
 
-    $canvas.on('dragover', file.fileDragOverHandler.bind(file));
-    $canvas.on('drop', file.fileDropHandler.bind(file));
+
 
     return {};
 

@@ -25,8 +25,6 @@ addEventListener('message', function(e) {
         }));
     });
 
-
-
     if (filterName == 'gaussian') {
         filter = new Gaussian(img, filterLength, sandbox);
     } else if (filterName == 'median') {

@@ -1,5 +1,12 @@
+/*
+ * gaussian filter constructor
+ * @param {object} img
+ * @param {number} filterLength
+ * @param {object} sandbox
+ */
 var Gaussian = function(img, filterLength, sandbox) {
 
+    // extend current filter by aggregation base filter
     Filter.call(this, img, filterLength, sandbox);
 
     this.filterMatrix = [];
@@ -9,8 +16,14 @@ var Gaussian = function(img, filterLength, sandbox) {
 
 };
 
+// extend current filter with function's from base filter
 Gaussian.prototype = new Filter;
 
+/*
+ * override generalized computing function due to another filter computing logic
+ * @param {number} from
+ * @param {number} to
+ */
 Gaussian.prototype.compute = function(from, to) {
     var i, j, k;
     for (k=0; k<this.filterIteration; k++) {
@@ -25,11 +38,20 @@ Gaussian.prototype.compute = function(from, to) {
     }
 };
 
+/*
+ * return value of 2d gaussian function
+ * @param {number} x
+ * @param {number} y
+ * @return {number}
+ */
 Gaussian.prototype.getFilterValue =  function(x, y) {
     var sigma = 10;
     return (1/(2*Math.PI*sigma*sigma)) * Math.exp(-((x*x+y*y)/(2*sigma*sigma)));
 };
 
+/*
+ * fill matrix with result of gaussian function
+ */
 Gaussian.prototype.fillFilterMatrix = function() {
     var i, j;
     for (i=-this.filterLength;i<=this.filterLength;i++) {
@@ -42,6 +64,9 @@ Gaussian.prototype.fillFilterMatrix = function() {
     }
 };
 
+/*
+ * normalize matrix
+ */
 Gaussian.prototype.normalizeFilterMatrix = function() {
     var i, j, totalVal = 0;
     for (i=-this.filterLength; i<=this.filterLength; i++) {
@@ -56,6 +81,13 @@ Gaussian.prototype.normalizeFilterMatrix = function() {
     }
 };
 
+/*
+ * multiple i,j pixel on coefficient
+ * @param {number} i
+ * @param {number} j
+ * @param {number} coefficient
+ * @return {object}
+ */
 Gaussian.prototype.getValue = function(i, j, coefficient) {
     var pixVal = this.adaptedImg.get(i, j)
         , pixValRes = {};
@@ -69,6 +101,12 @@ Gaussian.prototype.getValue = function(i, j, coefficient) {
     return pixValRes;
 };
 
+/*
+ * compute i,j pixel value
+ * @param {number} i
+ * @param {number} j
+ * @return {object}
+ */
 Gaussian.prototype.getPixelValue = function(i,j) {
     var k
         , l
