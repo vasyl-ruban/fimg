@@ -10,12 +10,17 @@
   <script type="text/javascript" src="lib/jasmine-1.3.1/jasmine-html.js"></script>
 
   <!-- include source files here... -->
-  <script type="text/javascript" src="/javascripts/img-adapter.js"></script>
-  <script type="text/javascript" src="/javascripts/base-filter.js"></script>
-  <script type="text/javascript" src="/javascripts/gaussian-filter.js"></script>
+    <script type="text/javascript" src="/javascripts/mediator.js"></script>
+  <script type="text/javascript" src="/javascripts/filters/img-adapter.js"></script>
+  <script type="text/javascript" src="/javascripts/filters/base-filter.js"></script>
+  <script type="text/javascript" src="/javascripts/filters/gaussian-filter.js"></script>
+  <script type="text/javascript" src="/javascripts/filters/median-filter.js"></script>
+  <script type="text/javascript" src="/javascripts/filters/noise-filter.js"></script>
 
   <!-- include spec files here... -->
   <script type="text/javascript" src="spec/gaussian-spec.js"></script>
+  <script type="text/javascript" src="spec/median-spec.js"></script>
+  <script type="text/javascript" src="spec/noise-spec.js"></script>
 
   <script type="text/javascript">
     (function() {

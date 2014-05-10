@@ -37,5 +37,4 @@ Noise.prototype.getPixelValue = function(i, j) {
  */
 Noise.prototype.getRandomDeviation = function() {
     return (Math.random() - 0.5) * 5 * this.filterIteration;
-
 };
