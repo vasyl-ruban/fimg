@@ -6,6 +6,7 @@ define(['jquery', 'mediator'], function($, sandbox) {
     var File = function() {
         this.sandbox = sandbox;
         this.$holder = $('html');
+        this.$dropImageText = $('.canvas-text');
         this.file;
         this.fileContentURL;
         this.fileImg = new Image;
@@ -40,6 +41,7 @@ define(['jquery', 'mediator'], function($, sandbox) {
         fileDropHandler: function(e) {
             e.stopPropagation();
             e.preventDefault();
+            this.$dropImageText.css('display', 'none');
             this.file = e.originalEvent.dataTransfer.files.item(0);
             this.downloadFile();
         },
