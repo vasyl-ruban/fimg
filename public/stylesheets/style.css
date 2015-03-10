@@ -45,7 +45,9 @@ a {
     background-color: #00B7FF;
     height: 15px;
 }
-
+.zid{
+    border-color: #ff44a1;
+}
 .canvas-text {
     position: absolute;
     top: 45%;
